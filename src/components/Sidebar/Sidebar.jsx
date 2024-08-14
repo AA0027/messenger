@@ -4,7 +4,7 @@ import './Sidebar.css';
 import { useNavigate } from 'react-router-dom';
 import { LoginContext } from '../../contexts/LoginContextProvider';
 import * as data from '../../apis/data';
-import * as convert from './Convert';
+import * as convert from '../Body/Convert';
 const style = {
     position: 'absolute',
     top: '50%',
