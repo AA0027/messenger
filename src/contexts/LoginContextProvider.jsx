@@ -6,7 +6,7 @@ import * as Swal from '../apis/alert';
 import * as auth from '../apis/auth';
 import api from '../apis/api';
 import { Stomp } from '@stomp/stompjs';
-
+import { HOST } from '../apis/api'
 export const LoginContext = createContext();
 LoginContext.displayName = 'LoginContextName';
 
@@ -204,7 +204,7 @@ const LoginContextProvider = ({children}) => {
     const headers = {
       'Authorization': `Bearer ${accessToken}`
     };
-    const socket = new WebSocket("ws://localhost:8080/channel");
+    const socket = new WebSocket(HOST);
     stompClient.current = Stomp.over(socket);
     stompClient.current.connect(headers,() => {
     console.log("연결 완료");
