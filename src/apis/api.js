@@ -6,7 +6,7 @@ import axios from 'axios'
 
 const api = axios.create();
 
-export const SERVER_HOST = `http://54.180.104.144:8080/api`;
-export const HOST = `ws://54.180.104.144:8080/channel`;
+export const SERVER_HOST = `http://13.125.254.185:8080/api`;
+export const HOST = `ws://13.125.254.185:8080/channel`;
 
 export default api;
