@@ -14,7 +14,7 @@ export const userInfo = () => api.get(`${SERVER_HOST}/user`);
 export const authInfo = () => api.get(`${SERVER_HOST}/auth`);
 
 // 회원가입 요청
-export const join = (data) => api.post(`${SERVER_HOST}/user/join`, data);  // JSON 으로 전달
+export const join = (data) => api.post(`${SERVER_HOST}/join`, data);  // JSON 으로 전달
 
 // 모든 사용자 정보 요청
 export const getUsers = () => api.get(`${SERVER_HOST}/users`);
