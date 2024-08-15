@@ -5,7 +5,7 @@ import { SERVER_HOST } from './api';
 // 요청하는 동작들에 대해서 함수로 만들어 export 해둔다
 
 // 로그인 요청
-export const login = (username, password) => api.post(`http://3.35.4.138:8080/login`, {username, password}, {headers: {"Content-Type": "application/x-www-form-urlencoded"}})
+export const login = (username, password) => api.post(`${SERVER_HOST}/login`, {username, password}, {headers: {"Content-Type": "application/x-www-form-urlencoded"}})
 
 // user 정보 요청
 export const userInfo = () => api.get(`${SERVER_HOST}/user`);
