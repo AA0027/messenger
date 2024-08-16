@@ -208,7 +208,7 @@ const LoginContextProvider = ({children}) => {
     stompClient.current = Stomp.over(socket);
     stompClient.current.connect(headers,() => {
     console.log("연결 완료");
-    stompClient.current.subscribe(`/sub/${username}`);
+    stompClient.current.subscribe(`/api/sub/${username}`);
     });
    
     console.log(`
