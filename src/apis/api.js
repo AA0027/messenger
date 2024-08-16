@@ -6,10 +6,9 @@ import axios from 'axios'
 
 const api = axios.create();
 axios.defaults.withCredentials = true;
-// 출처: https://artistjay.tistory.com/26 [Jlog:티스토리]
 export const SERVER_HOST = `/api`;
-export const HOST = `/api/channel`;
-// export const SERVER_HOST = `http://3.35.4.138:8080/api`;
-// export const HOST = `ws://3.35.4.138:8080/channel`;
+export const HOST = `/channel`;
+// export const SERVER_HOST = `http://localhost:8080/api`;
+// export const HOST = `ws://localhost:8080/channel`;
 
 export default api;
