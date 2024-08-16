@@ -51,7 +51,7 @@ const Sidebar = () => {
             <Avatar src="/broken-image.jpg" 
                 sx={{width: "100px", height: "100px", margin: "20px"}}/>
 
-            <div className='user-info merriweather-regular'> 
+            <div className='user-info jua-regular'> 
                 {userInfo.name}({convert.getDept(userInfo.dept)})<br></br>
                 {convert.getPos(userInfo.position) }
             </div>
