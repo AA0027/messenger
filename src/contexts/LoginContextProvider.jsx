@@ -204,7 +204,7 @@ const LoginContextProvider = ({children}) => {
     const headers = {
       'Authorization': `Bearer ${accessToken}`
     };
-    const socket = new WebSocket(HOST);
+    const socket = new WebSocket(HOST, {reconnectDelay: 3000});
     stompClient.current = Stomp.over(socket);
     stompClient.current.connect(headers,() => {
     console.log("연결 완료");
