@@ -7,6 +7,7 @@ import axios from 'axios';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
 import {SERVER_HOST} from '../../apis/api'
+import * as data from '../../apis/data';
 const ChatRoom = (prop) => {
     const {code, messages, setMessages, addData, setAddData} = prop;
     const {userInfo, stompClient} = useContext(LoginContext);
@@ -56,20 +57,7 @@ const ChatRoom = (prop) => {
     const getFiles = () => {
         document.getElementsByClassName("file-input")[0].click();
     }
-    // 시간 변환 메소드
-    const getTime = () => {
-        const date = new Date();
-
-        let year = date.getFullYear(); // 년도
-        let month = date.getMonth() + 1;  // 월
-        let day = date.getDate();  // 날짜
-       
-        let hours = ('0' + date.getHours()).slice(-2);
-        let minutes = ('0' + date.getMinutes()).slice(-2);
-        let seconds = ('0' + date.getSeconds()).slice(-2); 
-        let timeString =  year   + "-" + month + "-" + day +" " + hours + ':' + minutes  + ':' + seconds;
-        return timeString;
-    }
+    
 
     // 메시지 전송 메소드
     const send = () => {
@@ -84,10 +72,10 @@ const ChatRoom = (prop) => {
             type: "",
             content: message,
             files: null,
-            regdate: getTime()
+            regdate: data.getTime()
         }
         stompClient.current.send(`/pub/${code}`, {}, JSON.stringify(msg));
-        setMessages([...messages, msg]);
+        // setMessages([...messages, msg]);
     }
     // 파일 업로드 메소드
     const uploadFiles = (e) => {
@@ -116,7 +104,7 @@ const ChatRoom = (prop) => {
                 username: userInfo.username,
                 content: message,
                 type: "file",
-                regdate: getTime(),
+                regdate: data.getTime(),
                 files: res.data
             }
             stompClient.current.send(`/pub/${code}`, {}, JSON.stringify(msg));

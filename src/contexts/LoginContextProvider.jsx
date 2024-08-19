@@ -40,6 +40,7 @@ const LoginContextProvider = ({children}) => {
   const [roles, setRoles] = useState(JSON.parse(localStorage.getItem("roles")) || { isMember: false, isAdmin: false });
 
   const subList = useRef([0]);
+  const [messages, setMessages] = useState([]);
 
   /**
    * 💍✅ 로그인 체크
@@ -274,7 +275,7 @@ const LoginContextProvider = ({children}) => {
 
   return (
     <>
-    <LoginContext.Provider value={ { isLogin, userInfo, roles, stompClient, subList, loginCheck, login, logout }}>
+    <LoginContext.Provider value={ { isLogin, userInfo, roles, stompClient, subList, loginCheck, login, logout, messages, setMessages }}>
         {children}
     </LoginContext.Provider>
     </>

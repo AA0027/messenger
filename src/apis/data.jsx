@@ -46,3 +46,18 @@ import { SERVER_HOST } from './api';
 
 // 채팅방의 모든 파일 가져오기
     export const getFiles = async (code) => api.get(`${SERVER_HOST}/api/file/list?code=${code}`);
+
+    // 시간 변환 메소드
+    export const getTime = () => {
+        const date = new Date();
+
+        let year = date.getFullYear(); // 년도
+        let month = date.getMonth() + 1;  // 월
+        let day = date.getDate();  // 날짜
+       
+        let hours = ('0' + date.getHours()).slice(-2);
+        let minutes = ('0' + date.getMinutes()).slice(-2);
+        let seconds = ('0' + date.getSeconds()).slice(-2); 
+        let timeString =  year   + "-" + month + "-" + day +" " + hours + ':' + minutes  + ':' + seconds;
+        return timeString;
+    }

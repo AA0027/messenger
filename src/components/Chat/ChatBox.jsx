@@ -4,30 +4,14 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import { LoginContext } from '../../contexts/LoginContextProvider';
 import * as data from '../../apis/data';
 const ChatBox = (prop) => {
-    const { messages, setMessages, code, scrollRef }  = prop;
-    const { userInfo } = useContext(LoginContext);
+    const { code, scrollRef }  = prop;
+    const { userInfo, messages } = useContext(LoginContext);
     // const [groupedMessages, setGroupedMessages] = useState([]);
     // const days = useRef([0]);
     let groupedMessages;
-    // 메시지 가져옴
-    useEffect(()=>{
-        getMsg();
-        console.log();
-    },[]);
+   
 
-     // 메시지 가져오는 메소드
-     const getMsg = async () => {
-        const info = {
-            code: code,
-            username: userInfo.username,
-        };
-        const response = await data.getMessageList(info);
-        if(response.data === undefined)
-            return
-        
-        setMessages([...(response.data)]);
-    }
-
+    
     const groupMessagesByDate = (messages) => {
         return messages.reduce((groups, message) => {
             const date = message.regdate.split(" ")[0];

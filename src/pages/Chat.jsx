@@ -8,9 +8,10 @@ import Drawer from '@mui/material/Drawer';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import * as data from '../apis/data'
 import Emp from '../components/Chat/Emp';
+
 const Chat = () => {
-    const [messages, setMessages] = useState([]);
-    const { isLogin, stompClient} = useContext(LoginContext);
+    
+    const { isLogin, messages, setMessages} = useContext(LoginContext);
     const location = useLocation();
     const { name, code} = location.state;
     const [open, setOpen] = useState(false);
@@ -19,23 +20,23 @@ const Chat = () => {
     const [list, setList] = useState([0]);
     const [addData, setAddData] = useState(true);
     useEffect(()=>{
-
         getChatDatas();
-    }, [addData]);
+
+    }, []);
 
    const getChatDatas = async () => {
         const response1 = await data.attendeeList(code);
-        const response2 = await data.getFiles(code);
+        // const response2 = await data.getFiles(code);
         setAttendee(response1.data);
-        setChatFiles(response2.data);
-        const {id} = stompClient.current.subscribe(`/sub/${code}`, (message) => {
-            setMessages([...messages, message.body]);
-            console.log(message.body);
-            setAddData(!addData);
-        });
-        console.log("구독 결과 : " + id);
-        // setChannelList(...channelList, code);
+        // setChatFiles(response2.data);
+        
    }
+
+  
+   
+
+    
+
 
     const toggleDrawer = (newOpen) => () => {
         
@@ -43,7 +44,7 @@ const Chat = () => {
       };
     
 
-      
+       
 
       
    
