@@ -25,7 +25,7 @@ const MyChannel = () => {
                     <div className=' content jua-regular'>
                         <div className='head'>My Channel</div>
                         <div className='channel-list'>
-                            { channelList.map(e => (<Channel key={e.id} name={e.name} code={e.code} channelList={channelList} setChannelList={setChannelList}/>)) }
+                            {channelList && channelList.map(e => (<Channel key={e.id} name={e.name} code={e.code} channelList={channelList} setChannelList={setChannelList}/>)) }
                         </div>
                     </div>
                 

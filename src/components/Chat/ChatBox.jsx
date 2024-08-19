@@ -11,10 +11,8 @@ const ChatBox = (prop) => {
     let groupedMessages;
     // 메시지 가져옴
     useEffect(()=>{
-       getMsg();
+        getMsg();
         console.log();
-
-        
     },[]);
 
      // 메시지 가져오는 메소드

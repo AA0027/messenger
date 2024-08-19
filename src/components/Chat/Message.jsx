@@ -27,7 +27,7 @@ const Message = (prop) => {
     else {
         return (
             <div className='message you' >
-                <div>
+                <div className='message-info'>
                     <div className='avartar'>
                         <Avatar sx={{ bgcolor: deepPurple[500], width: "40px"
                             , height: "40px"}} >

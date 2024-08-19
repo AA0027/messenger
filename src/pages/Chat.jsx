@@ -10,7 +10,7 @@ import * as data from '../apis/data'
 import Emp from '../components/Chat/Emp';
 const Chat = () => {
     const [messages, setMessages] = useState([]);
-    const { isLogin} = useContext(LoginContext);
+    const { isLogin, stompClient} = useContext(LoginContext);
     const location = useLocation();
     const { name, code} = location.state;
     const [open, setOpen] = useState(false);
@@ -28,6 +28,12 @@ const Chat = () => {
         const response2 = await data.getFiles(code);
         setAttendee(response1.data);
         setChatFiles(response2.data);
+        const {id} = stompClient.current.subscribe(`/sub/${code}`, (message) => {
+            setMessages([...messages, message.body]);
+            console.log(message.body);
+        });
+        console.log("구독 결과 : " + id);
+        // setChannelList(...channelList, code);
    }
 
     const toggleDrawer = (newOpen) => () => {
