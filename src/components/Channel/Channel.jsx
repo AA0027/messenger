@@ -15,12 +15,6 @@ const Channel = (prop) => {
             <div className='channel-btn'>
                 <Button variant="contained" size="small" 
                      onClick={async () => {
-                            const x = {
-                                username: userInfo.username,
-                                code: "",
-                                subId: ""
-                            }
-                            
                             if(!channelList.includes(code)){
                                 const {id} = stompClient.current.subscribe(`/sub/${code}`);
                                 console.log("구독 결과 : " + id);

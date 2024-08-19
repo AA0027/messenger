@@ -15,16 +15,19 @@ const Chat = () => {
     const { name, code} = location.state;
     const [open, setOpen] = useState(false);
     const [attendee, setAttendee] = useState([]);
+    const [chatFiles, setChatFiles] = useState([]);
     const [list, setList] = useState([0]);
-    const [addEmp, setAddEmp] = useState(true);
+    const [addData, setAddData] = useState(true);
     useEffect(()=>{
 
-        getAttendees();
-    }, [addEmp]);
+        getChatDatas();
+    }, [addData]);
 
-   const getAttendees = async () => {
-        const response = await data.attendeeList(code);
-        setAttendee(response.data);
+   const getChatDatas = async () => {
+        const response1 = await data.attendeeList(code);
+        const response2 = await data.getFiles(code);
+        setAttendee(response1.data);
+        setChatFiles(response2.data);
    }
 
     const toggleDrawer = (newOpen) => () => {
@@ -44,18 +47,18 @@ const Chat = () => {
             <div className="container">
                 <Sidebar/>
             
-                <div className=' content jua-regular'>
-                    <div className='head' style={{width: "70%"}}>
+                <div className=' content'>
+                    <div className='head jua-regular' style={{width: "70%"}}>
                         {name} 
                         <Button variant="contained" size="small" onClick={toggleDrawer(true)}>
                             초대
                         </Button>
                     </div>
                     <div>
-                        <ChatRoom messages={messages} setMessages={setMessages} code={code}/>
+                        <ChatRoom messages={messages} setMessages={setMessages} code={code} addData={addData} setAddData={setAddData}/>
                     </div>
                     <div className='chat-data'>
-                        <Accordion>
+                        <Accordion sx={{width: "150px"}}>
                             <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1-content"
@@ -71,10 +74,26 @@ const Chat = () => {
                             </AccordionDetails>
                         </Accordion>
 
+                        <Accordion sx={{width: "150px"}}>
+                            <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1-content"
+                            id="panel1-header"
+                            >
+                            파일
+                            </AccordionSummary>
+                            <AccordionDetails sx={{maxHeight: "200px", overflow: "scroll", overflowX: "hidden"}}>
+                            {
+                                chatFiles && 
+                                chatFiles.map((f) => (<div>{f.sourcename}</div>))
+                            }
+                            </AccordionDetails>
+                        </Accordion>
+
                     </div>
                 </div>
                 <Drawer open={open} onClose={toggleDrawer(false)} anchor='right'>
-                    <Emp code={code} list={list} setList={setList} setOpen={setOpen} attendee={attendee} addEmp={addEmp} setAddEmp={setAddEmp}/>
+                    <Emp code={code} list={list} setList={setList} setOpen={setOpen} attendee={attendee} addData={addData} setAddData={setAddData}/>
                 </Drawer>
             
             </div>}

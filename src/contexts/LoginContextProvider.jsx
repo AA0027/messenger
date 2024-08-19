@@ -204,11 +204,11 @@ const LoginContextProvider = ({children}) => {
     const headers = {
       'Authorization': `Bearer ${accessToken}`
     };
-    const socket = new WebSocket(HOST, {reconnectDelay: 3000});
+    const socket = new WebSocket(HOST);
     stompClient.current = Stomp.over(socket);
     stompClient.current.connect(headers,() => {
     console.log("연결 완료");
-    // stompClient.current.subscribe(`/api/sub/${username}`);
+    stompClient.current.subscribe(`/api/sub/${username}`);
     });
    
     console.log(`
