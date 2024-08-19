@@ -31,6 +31,7 @@ const Chat = () => {
         const {id} = stompClient.current.subscribe(`/sub/${code}`, (message) => {
             setMessages([...messages, message.body]);
             console.log(message.body);
+            setAddData(!addData);
         });
         console.log("구독 결과 : " + id);
         // setChannelList(...channelList, code);
