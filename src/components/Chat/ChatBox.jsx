@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import Message from './Message';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import { LoginContext } from '../../contexts/LoginContextProvider';
-import * as data from '../../apis/data';
 const ChatBox = (prop) => {
     const { code, scrollRef }  = prop;
-    const { userInfo, messages } = useContext(LoginContext);
+    const { userInfo, messages} = useContext(LoginContext);
+    
     // const [groupedMessages, setGroupedMessages] = useState([]);
     // const days = useRef([0]);
     let groupedMessages;
@@ -13,6 +13,8 @@ const ChatBox = (prop) => {
 
     
     const groupMessagesByDate = (messages) => {
+        if(messages === null)
+            return;
         return messages.reduce((groups, message) => {
             const date = message.regdate.split(" ")[0];
           if (!groups[date]) {
@@ -47,7 +49,7 @@ const ChatBox = (prop) => {
                             {date}
                         </div>
                         {groupedMessages[date].map((m) => (
-                           m.sender && <Message m={m} my_name={userInfo.name} />
+                           m.sender && <Message key={m.id} m={m} my_name={userInfo.name} />
                         ))}
                     </div>
                 ))}

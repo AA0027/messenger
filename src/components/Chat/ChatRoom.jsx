@@ -9,8 +9,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import {SERVER_HOST} from '../../apis/api'
 import * as data from '../../apis/data';
 const ChatRoom = (prop) => {
-    const {code, messages, setMessages, addData, setAddData} = prop;
-    const {userInfo, stompClient} = useContext(LoginContext);
+    const {code, addData, setAddData} = prop;
+    const {userInfo, stompClient, messages, setMessages} = useContext(LoginContext);
     const [message, setMessage] = useState("");
     const [ files, setFiles ] = useState([]);
     const scrollRef = useRef();
@@ -75,7 +75,6 @@ const ChatRoom = (prop) => {
             regdate: data.getTime()
         }
         stompClient.current.send(`/pub/${code}`, {}, JSON.stringify(msg));
-        // setMessages([...messages, msg]);
     }
     // 파일 업로드 메소드
     const uploadFiles = (e) => {
@@ -117,7 +116,7 @@ const ChatRoom = (prop) => {
     return (
        
             <div className='chat-room'>
-                <ChatBox messages={messages} setMessages={setMessages} code={code} scrollRef={scrollRef}/>
+                <ChatBox code={code} scrollRef={scrollRef}/>
                 <div className='input-box'>
                     <Button variant="text" className='file-btn' onClick={getFiles} sx={{minWidth: "40px"}}>
                         <AttachFileIcon sx={{fontSize: "0.8rem"}}/>

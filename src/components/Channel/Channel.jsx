@@ -1,36 +1,32 @@
 import { Button } from '@mui/material';
-import React, { useContext } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginContext } from '../../contexts/LoginContextProvider';
 import * as data from '../../apis/data';
 const Channel = (prop) => {
     const { name, code} = prop;
-    const { stompClient, messages, setMessages, userInfo} = useContext(LoginContext);
+    const { stompClient, userInfo, messages, setMessages} = useContext(LoginContext);
     const navigate = useNavigate();
 
     
      const subscribe = () => {
-        const {id} = stompClient.current.subscribe(`/sub/${code}`, (message) => {
-        const msg = JSON.parse(message.body);
-        console.log(messages);
-        setMessages([...messages, msg]);
-
-        console.log(message.body);
+        const {id} = stompClient.current.subscribe(`/sub/${code}`, () => {
+        getMsg();
         });
         console.log("구독 결과 : " + id);
      }
 
-    // 메시지 가져오는 메소드
+     // 메시지 가져오는 메소드
     const getMsg = async () => {
-    const info = {
-        code: code,
-        username: userInfo.username,
-    };
-    const response = await data.getMessageList(info);
-    if(response.data === undefined)
-        return
-    
-    setMessages([...(response.data)]);
+        const info = {
+            code: code,
+            username: userInfo.username,
+        };
+        const response = await data.getMessageList(info);
+        if(response.data === undefined)
+            return
+        
+        setMessages(response.data);
     }
 
     return (
@@ -41,7 +37,6 @@ const Channel = (prop) => {
             <div className='channel-btn'>
                 <Button variant="contained" size="small" 
                      onClick={async () => {
-                            getMsg();
                             subscribe();
                             navigate("/chat", {state: {name: name, code: code}});
                         }}>

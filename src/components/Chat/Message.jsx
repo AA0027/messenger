@@ -12,7 +12,7 @@ const Message = (prop) => {
                     <div className='date'>{(m.regdate.split(" "))[1]}</div>
                     <div className='msg-bowl'>
                         {m.content && <div className='msg'>{m.content}</div>}
-                        {m.files && m.files.map((f) => <div className='file-msg'>{f.sourcename}</div>)}
+                        {m.files && m.files.map((f) => <div key={f.id} className='file-msg'>{f.sourcename}</div>)}
                     </div> 
                     <Avatar sx={{ bgcolor: deepPurple[500], width: "40px"
                         , height: "40px", }}>

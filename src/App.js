@@ -11,13 +11,13 @@ function App() {
   return (
     <BrowserRouter>
     <LoginContextProvider>
-      <Routes>
-        <Route path='/' element={<LoginForm/>}/>
-        <Route path='/join' element={<SignUp/>}/>
-        <Route path="/home" element={<Home/>}/> 
-        <Route path="/chat" element={<Chat/>}/>
-        <Route path="/myChannel" element={<MyChannel/>}/>
-      </Routes>
+        <Routes>
+          <Route path='/' element={<LoginForm/>}/>
+          <Route path='/join' element={<SignUp/>}/>
+          <Route path="/home" element={<Home/>}/> 
+          <Route path="/chat" element={<Chat/>}/>
+          <Route path="/myChannel" element={<MyChannel/>}/>
+        </Routes>
     </LoginContextProvider>
     </BrowserRouter>
   );

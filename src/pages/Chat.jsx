@@ -11,7 +11,7 @@ import Emp from '../components/Chat/Emp';
 
 const Chat = () => {
     
-    const { isLogin, messages, setMessages} = useContext(LoginContext);
+    const { isLogin, userInfo, setMessages} = useContext(LoginContext);
     const location = useLocation();
     const { name, code} = location.state;
     const [open, setOpen] = useState(false);
@@ -20,8 +20,8 @@ const Chat = () => {
     const [list, setList] = useState([0]);
     const [addData, setAddData] = useState(true);
     useEffect(()=>{
+        getMsg();
         getChatDatas();
-
     }, []);
 
    const getChatDatas = async () => {
@@ -32,22 +32,24 @@ const Chat = () => {
         
    }
 
-  
-   
-
-    
-
+    // 메시지 가져오는 메소드
+    const getMsg = async () => {
+        const info = {
+            code: code,
+            username: userInfo.username,
+        };
+        const response = await data.getMessageList(info);
+        if(response.data === undefined)
+            return
+        
+        setMessages(response.data);
+    }
 
     const toggleDrawer = (newOpen) => () => {
         
         setOpen(newOpen);
-      };
+    };
     
-
-       
-
-      
-   
     return (
         <>
         {
@@ -63,7 +65,7 @@ const Chat = () => {
                         </Button>
                     </div>
                     <div>
-                        <ChatRoom messages={messages} setMessages={setMessages} code={code} addData={addData} setAddData={setAddData}/>
+                        <ChatRoom code={code} addData={addData} setAddData={setAddData}/>
                     </div>
                     <div className='chat-data'>
                         <Accordion sx={{width: "150px"}}>
@@ -77,7 +79,7 @@ const Chat = () => {
                             <AccordionDetails sx={{maxHeight: "200px", overflow: "scroll", overflowX: "hidden"}}>
                             {
                                 attendee && 
-                                attendee.map((e) => (<div>{e.name}</div>))
+                                attendee.map((e) => (<div key={e.id}>{e.name}</div>))
                             }
                             </AccordionDetails>
                         </Accordion>
