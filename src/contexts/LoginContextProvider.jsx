@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import * as Swal from '../apis/alert';
 import * as auth from '../apis/auth';
+import * as data from '../apis/data';
 import api from '../apis/api';
 import { Stomp } from '@stomp/stompjs';
 import { HOST } from '../apis/api'
@@ -41,7 +42,7 @@ const LoginContextProvider = ({children}) => {
 
   const subList = useRef([0]);
   const [messages, setMessages] = useState([]);
-
+  const [ inviteCard, setInviteCard ] = useState([0]);
   /**
    * 💍✅ 로그인 체크
    *
@@ -202,6 +203,9 @@ const LoginContextProvider = ({children}) => {
    */
   const loginSetting = (userData, accessToken) => {
     const {id, username, role, name, dept, position} = userData;
+    const card = data.getMyInvite({code: "", username: username});
+    // 로그인시 나의 초대장 자동 설정
+    setInviteCard(card.data);
     const headers = {
       'Authorization': `Bearer ${accessToken}`
     };
@@ -209,7 +213,10 @@ const LoginContextProvider = ({children}) => {
     stompClient.current = Stomp.over(socket);
     stompClient.current.connect(headers,() => {
     console.log("연결 완료");
-    stompClient.current.subscribe(`/api/sub/${username}`);
+    stompClient.current.subscribe(`/api/sub/${username}`, (message) => {
+      const newMessage = JSON.parse(message.body);
+      setInviteCard([...inviteCard, newMessage]);
+    });
     });
    
     console.log(`
@@ -275,7 +282,7 @@ const LoginContextProvider = ({children}) => {
 
   return (
     <>
-    <LoginContext.Provider value={ { isLogin, userInfo, roles, stompClient, subList, loginCheck, login, logout, messages, setMessages }}>
+    <LoginContext.Provider value={ { isLogin, userInfo, roles, stompClient, subList, loginCheck, login, logout, messages, setMessages, inviteCard}}>
         {children}
     </LoginContext.Provider>
     </>

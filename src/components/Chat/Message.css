@@ -8,6 +8,7 @@
 
 .message-info{
     display: flex;
+    gap: 1px;
 }
 .my {
     margin-left: auto;
@@ -19,10 +20,12 @@
 }
 
 .msg-bowl {
+    margin: 0 5px;
     max-width: 200px;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    justify-content: flex-end;
     gap: 10px;
 }
 .msg {
@@ -37,6 +40,7 @@
     border-radius: 3px;
     padding: 5px;
     font-size: 0.6rem;
+    
 }
 
 

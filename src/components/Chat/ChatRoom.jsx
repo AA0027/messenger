@@ -94,6 +94,8 @@ const ChatRoom = (prop) => {
             }
         )
         .then((res) => {
+            const result = res.data;
+            const files = result.map(e => e.id);
             const msg = {
                 code: code,
                 sender: {
@@ -104,12 +106,24 @@ const ChatRoom = (prop) => {
                 content: message,
                 type: "file",
                 regdate: data.getTime(),
-                files: res.data
+                files: files
             }
             stompClient.current.send(`/pub/${code}`, {}, JSON.stringify(msg));
             setFiles([]);
-            setMessages([...messages, msg]);
             setAddData(!addData);
+
+            const fileDto = {
+                fileID: res.data.map(x => x.id),
+                username: userInfo.username,
+                code: code,
+            };
+
+            axios.post(`${SERVER_HOST}/file/save`, fileDto)
+            .then((res) =>{
+                if(res.status === 200){
+                    console.log("저장이 완료되었습니다. ");
+                }
+            });
         });
     } 
 

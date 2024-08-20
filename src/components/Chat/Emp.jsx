@@ -1,8 +1,10 @@
 import { Box, Button, Checkbox, FormControl, InputLabel, List, ListItem, ListItemText, MenuItem, Select, TextField } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import * as data from '../../apis/data'
+import { LoginContext } from '../../contexts/LoginContextProvider';
 const Emp = (prop) => {
     const {code, list, setList, setOpen, attendee, addData, setAddData} = prop;
+    const { userInfo, stompClient } = useContext(LoginContext);
     const [empList, setEmpList] = useState([0]); 
     const origin = useRef([0]);
     const [dept, setDept] = useState("");
@@ -50,19 +52,19 @@ const Emp = (prop) => {
                 console.log(e.name + "은 이미 채팅방안에 있습니다. ");
             });
         }
-
-        const param = {
-            code: code,
-            usernames: list
-        }
-        const response = await data.invite(param);
-
-        if(response.status === 200){
-            console.log("사용자 초대완료");
+        list.forEach((i) => {
+            const param = {
+                code: code,
+                from: userInfo.username,
+                to: i
+            }
+            stompClient.current.send(`/pub/invite/${code}`, {}, JSON.stringify(param)); 
+        });
+        
+        console.log("사용자 초대완료");
             setList([]);
             setOpen(false);
             setAddData(!addData);
-        }
       }
 
       const searchEmp = (e) => {

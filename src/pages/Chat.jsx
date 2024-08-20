@@ -26,10 +26,9 @@ const Chat = () => {
 
    const getChatDatas = async () => {
         const response1 = await data.attendeeList(code);
-        // const response2 = await data.getFiles(code);
+        const response2 = await data.getFiles(code);
         setAttendee(response1.data);
-        // setChatFiles(response2.data);
-        
+        setChatFiles(response2.data);        
    }
 
     // 메시지 가져오는 메소드
@@ -92,10 +91,10 @@ const Chat = () => {
                             >
                             파일
                             </AccordionSummary>
-                            <AccordionDetails sx={{maxHeight: "200px", overflow: "scroll", overflowX: "hidden"}}>
+                            <AccordionDetails sx={{maxHeight: "200px", overflow: "scroll", overflowX: "hidden", display: "flex",flexDirection: "column", gap: "3px"}}>
                             {
                                 chatFiles && 
-                                chatFiles.map((f) => (<div>{f.sourcename}</div>))
+                                chatFiles.map((f) => (<div className='chat-file'>{f.sourcename}</div>))
                             }
                             </AccordionDetails>
                         </Accordion>

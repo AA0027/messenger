@@ -44,8 +44,8 @@ import { SERVER_HOST } from './api';
 
 // 끝
 
-// 채팅방의 모든 파일 가져오기
-    export const getFiles = async (code) => api.get(`${SERVER_HOST}/api/file/list?code=${code}`);
+    // 채팅방의 모든 파일 가져오기
+    export const getFiles = async (code) => api.get(`${SERVER_HOST}/file/list?code=${code}`);
 
     // 시간 변환 메소드
     export const getTime = () => {
@@ -61,3 +61,8 @@ import { SERVER_HOST } from './api';
         let timeString =  year   + "-" + month + "-" + day +" " + hours + ':' + minutes  + ':' + seconds;
         return timeString;
     }
+
+// 초대 관련 메소드
+    // 나의 초대장 조회
+    export const getMyInvite = async (data) => api.post(`${SERVER_HOST}/channel/my-invite`, data);
+// 끝
