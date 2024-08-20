@@ -5,11 +5,11 @@ import { LoginContext } from '../../contexts/LoginContextProvider';
 const Emp = (prop) => {
     const {code, list, setList, setOpen, attendee, addData, setAddData} = prop;
     const { userInfo, stompClient } = useContext(LoginContext);
-    const [empList, setEmpList] = useState([0]); 
+    const [empList, setEmpList] = useState([]); 
     const origin = useRef([0]);
     const [dept, setDept] = useState("");
     const [search, setSearch] = useState("");
-    const invited = useRef([0]);
+    const invited = useRef([]);
     
 
     useEffect(() => {

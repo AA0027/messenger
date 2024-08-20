@@ -17,7 +17,7 @@ const Chat = () => {
     const [open, setOpen] = useState(false);
     const [attendee, setAttendee] = useState([]);
     const [chatFiles, setChatFiles] = useState([]);
-    const [list, setList] = useState([0]);
+    const [list, setList] = useState([]);
     const [addData, setAddData] = useState(true);
     useEffect(()=>{
         getMsg();
