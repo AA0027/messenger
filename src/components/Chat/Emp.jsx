@@ -58,7 +58,7 @@ const Emp = (prop) => {
                 from: userInfo.username,
                 to: i
             }
-            stompClient.current.send(`/pub/invite/${code}`, {}, JSON.stringify(param)); 
+            stompClient.current.send(`/pub/invite/${i}`, {}, JSON.stringify(param)); 
         });
         
         console.log("사용자 초대완료");
