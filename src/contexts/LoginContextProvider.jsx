@@ -213,7 +213,7 @@ const LoginContextProvider = ({children}) => {
     stompClient.current = Stomp.over(socket);
     stompClient.current.connect(headers,() => {
     console.log("연결 완료");
-    stompClient.current.subscribe(`/api/sub/${username}`, (message) => {
+    stompClient.current.subscribe(`/sub/${username}`, (message) => {
       const newMessage = JSON.parse(message.body);
       setInviteCard([...inviteCard, newMessage]);
     });
