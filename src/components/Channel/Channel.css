@@ -36,11 +36,22 @@
 }
 
 .channel-btn {
-    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     
 }
 
 .chatting-index {
     margin-top: 5%;
     margin-left: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.channel-info {
+    display: flex;
+    gap: 5px;
+    align-items: center;
 }

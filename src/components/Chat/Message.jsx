@@ -35,7 +35,7 @@ const Message = (prop) => {
                         </Avatar>
                     </div>
                     <div className='msg-bowl'>
-                        {m.content !== "" && <div>{m.content}</div>}
+                        {m.content !== "" && <div className='msg'>{m.content}</div>}
                         {m.files && m.files.map((f) => <div className='file-msg'>{f.sourcename}</div>)}
                     </div> 
                     <div className='date'>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import Sidebar from '../components/Sidebar/Sidebar';
 import ChatRoom from '../components/Chat/ChatRoom';
 import { LoginContext } from '../contexts/LoginContextProvider';
@@ -11,47 +11,49 @@ import Emp from '../components/Chat/Emp';
 
 const Chat = () => {
     
-    const { isLogin, userInfo, setMessages} = useContext(LoginContext);
+    const { isLogin, userInfo, messages, subRoom, getMsg} = useContext(LoginContext);
     const location = useLocation();
-    const { name, code} = location.state;
+    const { name, code } = location.state;
     const [open, setOpen] = useState(false);
     const [attendee, setAttendee] = useState([]);
     const [chatFiles, setChatFiles] = useState([]);
     const [list, setList] = useState([]);
     const [addData, setAddData] = useState(true);
-    useEffect(()=>{
-        getMsg();
-        getChatDatas();
-    }, []);
-
+    const [fileM, setFileM] = useState(true);
+    
+    useEffect(() => {
+        console.log("1. Chat.jsx"); 
+        getMsg({code: code, username: userInfo.username});
+        subRoom(code, {code: code, username: userInfo.username});
+        getChatDatas();        
+    }, [ fileM ]);
+    
+    
    const getChatDatas = async () => {
         const response1 = await data.attendeeList(code);
         const response2 = await data.getFiles(code);
         setAttendee(response1.data);
-        setChatFiles(response2.data);        
+        setChatFiles(response2.data);   
+      
    }
+  
+  
 
-    // 메시지 가져오는 메소드
-    const getMsg = async () => {
-        const info = {
-            code: code,
-            username: userInfo.username,
-        };
-        const response = await data.getMessageList(info);
-        if(response.data === undefined)
-            return
-        
-        setMessages(response.data);
-    }
-
+   
     const toggleDrawer = (newOpen) => () => {
-        
         setOpen(newOpen);
     };
-    
+
+    const download = (f) => {
+        data.downloadFile(f);
+    };
+
     return (
+       
         <>
+        
         {
+            
             isLogin &&
             <div className="container">
                 <Sidebar/>
@@ -64,7 +66,7 @@ const Chat = () => {
                         </Button>
                     </div>
                     <div>
-                        <ChatRoom code={code} addData={addData} setAddData={setAddData}/>
+                        <ChatRoom code={code} addData={addData} setAddData={setAddData} fileM={fileM} setFileM={setFileM}/>
                     </div>
                     <div className='chat-data'>
                         <Accordion sx={{width: "150px"}}>
@@ -94,7 +96,7 @@ const Chat = () => {
                             <AccordionDetails sx={{maxHeight: "200px", overflow: "scroll", overflowX: "hidden", display: "flex",flexDirection: "column", gap: "3px"}}>
                             {
                                 chatFiles && 
-                                chatFiles.map((f) => (<div className='chat-file'>{f.sourcename}</div>))
+                                chatFiles.map((f) => (<Button className='chat-file' variant="text" onClick={()=>{download(f)}}>{f.sourcename}</Button>))
                             }
                             </AccordionDetails>
                         </Accordion>
@@ -106,7 +108,7 @@ const Chat = () => {
                 </Drawer>
             
             </div>}
-        </>
+        </> 
     );
 };
 

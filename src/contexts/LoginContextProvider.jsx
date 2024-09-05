@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 import * as Swal from '../apis/alert';
 import * as auth from '../apis/auth';
-import * as data from '../apis/data';
 import api from '../apis/api';
+import * as data from '../apis/data';
 import { Stomp } from '@stomp/stompjs';
 import { HOST } from '../apis/api'
 export const LoginContext = createContext();
@@ -39,10 +39,9 @@ const LoginContextProvider = ({children}) => {
   // 권한 정보
   // const [roles, setRoles] = useState({ isMember: false, isAdmin: false });
   const [roles, setRoles] = useState(JSON.parse(localStorage.getItem("roles")) || { isMember: false, isAdmin: false });
-
-  const subList = useRef([0]);
+  const subList = useRef([]);
+  const [inviteCard, setInviteCard] = useState([]);
   const [messages, setMessages] = useState([]);
-  const [ inviteCard, setInviteCard ] = useState([0]);
   /**
    * 💍✅ 로그인 체크
    *
@@ -191,6 +190,8 @@ const LoginContextProvider = ({children}) => {
 
   };
 
+  
+
   /**
    * 로그인 세팅
    *    accessToken 을 header (Authorization) 에 저장.  
@@ -201,24 +202,22 @@ const LoginContextProvider = ({children}) => {
    *    userInfo 세팅
    *    roles 세팅
    */
-  const loginSetting = (userData, accessToken) => {
+  const loginSetting = async (userData, accessToken) => {
     const {id, username, role, name, dept, position} = userData;
-    const card = data.getMyInvite({code: "", username: username});
-    // 로그인시 나의 초대장 자동 설정
-    setInviteCard(card.data);
+    
+    
     const headers = {
-      'Authorization': `Bearer ${accessToken}`
+      'Authorization': `Bearer ${Cookies.get('accessToken')}`
     };
     const socket = new WebSocket(HOST);
     stompClient.current = Stomp.over(socket);
     stompClient.current.connect(headers,() => {
     console.log("연결 완료");
     stompClient.current.subscribe(`/sub/${username}`, (message) => {
-      const newMessage = JSON.parse(message.body);
-      setInviteCard([...inviteCard, newMessage]);
-    });
-    });
-   
+            const msg = new Array(JSON.parse(message.body));
+            setInviteCard([...inviteCard, msg]);
+        })
+  });
     console.log(`
     loginSetting() 
        id : ${id}
@@ -268,6 +267,7 @@ const LoginContextProvider = ({children}) => {
     setIsLogin(false);
     setUserInfo(null);
     setRoles(null);
+    setMessages([]);
     // 쿠키 지우기
     Cookies.remove('accessToken');
     // axios 의 default  header 도 삭제
@@ -280,9 +280,37 @@ const LoginContextProvider = ({children}) => {
     localStorage.removeItem("roles");
   };
 
+  // 메세지 리스트 얻기
+  const getMsg = async (x) => {
+    const response = await data.getMessageList(x);
+    if(response.status === 200){
+        setMessages(response.data);
+    }
+  }
+
+  const subRoom = (code, x) => {
+    if(subList.current.includes(code)){
+      return;
+    } 
+
+    subList.current = [...(subList.current), code];
+    const {id} = stompClient.current.subscribe(`/sub/${code}`, () => {
+            getMsg(x);
+        })
+  }
+
+  const getInvite = async (x) => {
+      const response = await data.getMyInvite(x);
+      setInviteCard(response.data);
+  }
+
+
+  
+  
   return (
     <>
-    <LoginContext.Provider value={ { isLogin, userInfo, roles, stompClient, subList, loginCheck, login, logout, messages, setMessages, inviteCard}}>
+    <LoginContext.Provider value={ { isLogin, userInfo, roles, stompClient, subList, loginCheck, login, logout, inviteCard
+      , getInvite, setInviteCard, messages, getMsg, subRoom}}>
         {children}
     </LoginContext.Provider>
     </>

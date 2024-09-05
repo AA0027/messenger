@@ -8,14 +8,26 @@
     flex-wrap: wrap;
 
 } 
+.side-item {
+    flex-shrink: 1;
+}
 
 .user-avatar{
-    flex: 1 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex: 1 1;
+    padding: 0;
+    margin: 0;
+   
 }
+
 .user-info{
     display: flex;
-    flex: 1 1;
+   
     align-items: center;
+    
 }
 
 .logout {
@@ -37,12 +49,28 @@
     font-size: 1.5em;
 }
 
-.modal {
+.invite-modal {
+    outline: 1px solid black;
+    white-space: nowrap;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     gap: 5px;
+    margin-bottom: 5px;
+    max-height: 500px;
+    padding-left: 10px;
 }
 
+.invite {
+    font-size: 0.8rem;
+}
+.invite-btn {
+    padding: 0;
+}
+
+.from {
+    font-size: 0.4rem;
+}
 
 .jua-regular {
     font-family: "Jua", sans-serif;

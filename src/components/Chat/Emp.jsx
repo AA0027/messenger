@@ -6,7 +6,7 @@ const Emp = (prop) => {
     const {code, list, setList, setOpen, attendee, addData, setAddData} = prop;
     const { userInfo, stompClient } = useContext(LoginContext);
     const [empList, setEmpList] = useState([]); 
-    const origin = useRef([0]);
+    const origin = useRef([]);
     const [dept, setDept] = useState("");
     const [search, setSearch] = useState("");
     const invited = useRef([]);
@@ -16,12 +16,18 @@ const Emp = (prop) => {
         if(!attendee)
             invited.current = attendee.map((x) => x.username);
         getEmp();
+        console.log(list);
     }, []);
 
     const getEmp = async () => {
         const response = await data.allEmpt();
         origin.current = response.data;
-        setEmpList(response.data);
+
+        attendee.forEach(a => {
+            origin.current = [...(origin.current.filter(o => o.username !== a.username))];
+        });
+
+        setEmpList(origin.current);
     }
 
     

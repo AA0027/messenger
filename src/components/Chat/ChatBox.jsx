@@ -3,19 +3,24 @@ import Message from './Message';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import { LoginContext } from '../../contexts/LoginContextProvider';
 const ChatBox = (prop) => {
-    const { code, scrollRef }  = prop;
-    const { userInfo, messages} = useContext(LoginContext);
+    const { scrollRef, }  = prop;
+    const { userInfo , messages} = useContext(LoginContext);
     
-    // const [groupedMessages, setGroupedMessages] = useState([]);
-    // const days = useRef([0]);
     let groupedMessages;
    
+    useEffect(()=>{
+        console.log("3. ChatBox.jsx");
+        console.log(messages);
 
+        console.log(groupedMessages);
+        console.log(" test: " + messages);
+    }, [messages]);
     
     const groupMessagesByDate = (messages) => {
-        if(messages === null)
+        
+        if(!messages || messages.length === 0)
             return;
-        return messages.reduce((groups, message) => {
+        return  messages.reduce((groups, message) => {
             const date = message.regdate.split(" ")[0];
           if (!groups[date]) {
             groups[date] = [];
@@ -25,7 +30,7 @@ const ChatBox = (prop) => {
         }, {});
     };
 
-    if(!messages){
+    if(messages.length === 0){
         return (
             
         <div className='chat-box' ref={scrollRef} style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
@@ -43,6 +48,7 @@ const ChatBox = (prop) => {
             <div className='chat-box' ref={scrollRef}>
                 
                 {
+                    
                     (groupedMessages = groupMessagesByDate(messages)) && Object.keys(groupedMessages).map((date) => (
                     <div key={date} className='date-box'>
                         <div className='date-header'>

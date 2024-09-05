@@ -9,17 +9,19 @@ import CloseIcon from '@mui/icons-material/Close';
 import {SERVER_HOST} from '../../apis/api'
 import * as data from '../../apis/data';
 const ChatRoom = (prop) => {
-    const {code, addData, setAddData} = prop;
-    const {userInfo, stompClient, messages, setMessages} = useContext(LoginContext);
+    const {code, addData, setAddData, fileM, setFileM} = prop;
+    const {userInfo, stompClient, messages} = useContext(LoginContext);
     const [message, setMessage] = useState("");
     const [ files, setFiles ] = useState([]);
     const scrollRef = useRef();
     
 
     useEffect(()=>{
+        console.log("2. ChatRoom.jsx");
+        console.log(messages);
         if(scrollRef){
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-            console.log("===========" + scrollRef.current.scrollTop);
+            // console.log("===========" + scrollRef.current.scrollTop);
         }
     },[messages]);
 
@@ -50,8 +52,8 @@ const ChatRoom = (prop) => {
     }
 
     // 파일 제거 메소드 files 상태변수에서 제외
-    const deleteFile = (e) => {
-        files && setFiles([...(files.filter((f)=> f.id !== e.target.key))]);
+    const deleteFile = (name) => {
+        files && setFiles([...(files.filter((f)=> f.name !== name))]);
     }
 
     const getFiles = () => {
@@ -75,10 +77,16 @@ const ChatRoom = (prop) => {
             regdate: data.getTime()
         }
         stompClient.current.send(`/pub/${code}`, {}, JSON.stringify(msg));
+        setMessage("");
     }
     // 파일 업로드 메소드
     const uploadFiles = (e) => {
         e.preventDefault();
+
+        if(files.length === 0){
+            send();
+            return;
+        }
         const formData = new FormData();
         files.forEach((file) => {
             formData.append("files", file);
@@ -122,6 +130,7 @@ const ChatRoom = (prop) => {
             .then((res) =>{
                 if(res.status === 200){
                     console.log("저장이 완료되었습니다. ");
+                    setFileM(!fileM);
                 }
             });
         });
@@ -132,17 +141,18 @@ const ChatRoom = (prop) => {
             <div className='chat-room'>
                 <ChatBox code={code} scrollRef={scrollRef}/>
                 <div className='input-box'>
-                    <Button variant="text" className='file-btn' onClick={getFiles} sx={{minWidth: "40px"}}>
+                    <Button variant="text" className='file-btn' color='success' onClick={getFiles} sx={{minWidth: "40px", outline: "1px solid green", borderRadius: "2px"}}>
                         <AttachFileIcon sx={{fontSize: "0.8rem"}}/>
                     </Button>
-                    <TextareaAutosize  onKeyDown={keyDownEvent} className="input"  placeholder="write message..." onChange={change} style={{height: "24px"}}/>
+                    <TextareaAutosize  onKeyDown={keyDownEvent} className="input"  placeholder="write message..." value={message} onChange={change} style={{height: "24px"}}/>
                     <Button variant="contained" className='file-btn' onClick={uploadFiles}
                         sx={{fontSize: "0.7rem"}} >
-                        전송</Button>
+                        전송
+                    </Button>
                 </div>
                 <div className='selected-file'>
                     {(files.length > 0) && 
-                        files.map(f => <div className='file'>{f.name}<Button key={f.id} onClick={deleteFile} ><CloseIcon sx={{fontSize: 'small'}} /></Button></div>)
+                        files.map(f => <div className='file'><div className='file-name'>{f.name}</div><Button key={f.name} onClick={() => deleteFile(f.name)} sx={{minWidth: "15px"}}><CloseIcon sx={{fontSize: 'small', color: "red"}} /></Button></div>)
                     }
                 </div>
                 <form>
