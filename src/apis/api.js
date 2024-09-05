@@ -6,9 +6,9 @@ import axios from 'axios'
 
 const api = axios.create();
 axios.defaults.withCredentials = true;
-// export const SERVER_HOST = `/api`;
-// export const HOST = `/channel`;
-export const SERVER_HOST = `http://localhost:8080/api`;
-export const HOST = `ws://localhost:8080/channel`;
+export const SERVER_HOST = `/api`;
+export const HOST = `/channel`;
+// export const SERVER_HOST = `http://localhost:8080/api`;
+// export const HOST = `ws://localhost:8080/channel`;
 
 export default api;
