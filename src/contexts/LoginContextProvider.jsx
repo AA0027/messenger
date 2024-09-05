@@ -289,10 +289,6 @@ const LoginContextProvider = ({children}) => {
   }
 
   const subRoom = (code, x) => {
-    if(subList.current.includes(code)){
-      return;
-    } 
-
     subList.current = [...(subList.current), code];
     const {id} = stompClient.current.subscribe(`/sub/${code}`, () => {
             getMsg(x);
