@@ -79,9 +79,36 @@ git clone https://github.com/AA0027/spring.git
 
 ## Troubleshooting    
 ### 채팅방 삭제시 에러 발생
+- [JPA] No EntityManager with actual transaction available for current thread - cannot reliably process 'remove' call 에러 확인
+- 찾아보니 이 오류는 스프링 트랜잭션 관련 문제로, 현재 스레드에 실제 트랜잭션이 없기 때문에 'remove' 호출을 신뢰할 수 없다는 것을 의미한 것이었다.   
+- 채팅방 삭제 서비스 메소드에 @Transaction 추가후 해결   
+```
+  // 채팅 방삭제
+    @Transactional
+    public void deleteChatRoom(String code){
+        ChatRoom chatRoom = chatRoomRepository.findByCode(code)
+                .orElseThrow(() -> new NoSuchDataException("해당데이터가 존재하지 않습니다."));
+        chatRoomRepository.delete(chatRoom);
+
+    }
+```
 
 ### 리버스 프록시로 인한 로그인 처리 API 경로 변경 문제
+- 로그인 처리 경로 변경으로 인하여 해당 Controller를 만들지 않고 LoginFilter 처리 경로를 변경함으로 해결
+```
+@Slf4j
+public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
+   ...
+
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
+        this.authenticationManager = authenticationManager;
+        setFilterProcessesUrl("/api/login");
+        this.jwtUtil = jwtUtil;
+    }
+   ...
+}
+```
 ## 앞으로의 계획   
 - 현재 프로젝트를 더 확장시켜서 조직도를 만들고 EC2 서버 4대를 사용하여 2개는 스프링 서버
   다른 2개는 리액트 서버를 사용하여 K6를 활용하여 성능테스트 및 개선을 할것이다.
